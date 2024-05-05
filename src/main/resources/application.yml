@@ -1,6 +1,6 @@
 spring:
     application:
-        name: evently
+        name: @project.name@
         version: @project.version@
     datasource:
         url: jdbc:postgresql://localhost:5432/evently
