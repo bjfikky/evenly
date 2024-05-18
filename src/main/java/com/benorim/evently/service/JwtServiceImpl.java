@@ -1,6 +1,7 @@
 package com.benorim.evently.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -60,12 +61,16 @@ public class JwtServiceImpl implements JwtService {
         return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private SecretKey getSecretKey() {
+    protected SecretKey getSecretKey() {
         byte[] key = Decoders.BASE64.decode(BASE_64_STRING);
         return Keys.hmacShaKeyFor(key);
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractClaim(token, Claims::getExpiration).before(new Date(System.currentTimeMillis()));
+    protected boolean isTokenExpired(String token) {
+        try {
+            return extractClaim(token, Claims::getExpiration).before(new Date(System.currentTimeMillis()));
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 }
