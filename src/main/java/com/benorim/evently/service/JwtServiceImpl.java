@@ -6,13 +6,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
-
+@Service
 public class JwtServiceImpl implements JwtService {
 
     private static final String BASE_64_STRING = "88eYaDwOqL5v3vjfNlAdJnc90YdV5ANgsx483qa5PWM=";
@@ -24,7 +25,7 @@ public class JwtServiceImpl implements JwtService {
                 .getPayload();
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
+    protected<T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
     }
@@ -41,6 +42,7 @@ public class JwtServiceImpl implements JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .claims(Map.of("role", userDetails.getAuthorities().iterator().next().getAuthority()))
                 .signWith(getSecretKey())
                 .compact();
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,9 @@ public class Event {
     private LocalDateTime endTime;
 
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    private EventlyUser createdBy;
 
     @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt = LocalDateTime.now();
