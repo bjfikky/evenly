@@ -1,5 +1,6 @@
 package com.benorim.evently.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -47,19 +48,19 @@ public class Event {
     @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @OneToMany
-    private List<Guest> guests;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    private List<Invitation> invitations;
 
     private String additionalNotes;
 
-    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, List<Guest> guests, String additionalNotes) {
+    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, List<Invitation> invitations, String additionalNotes) {
         this.title = title;
         this.description = description;
         this.address = address;
         this.imageUrl = imageUrl;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.guests = guests;
+        this.invitations = invitations;
         this.additionalNotes = additionalNotes;
     }
 
