@@ -1,7 +1,10 @@
 package com.benorim.evently.service;
 
 import com.benorim.evently.entity.Event;
+import com.benorim.evently.entity.EventlyUser;
+import com.benorim.evently.exception.EventNotFoundException;
 import com.benorim.evently.exception.EventUpdateOrCreateException;
+import com.benorim.evently.exception.IllegalOperationException;
 import com.benorim.evently.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +28,9 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
+        EventlyUser eventlyUser = AuthenticationService.getAuthenticatedUser();
         event.setCreatedAt(LocalDateTime.now());
+        event.setCreatedBy(eventlyUser);
         try {
             return eventRepository.save(event);
         } catch (Exception e) {
@@ -36,6 +41,8 @@ public class EventService {
     }
 
     public void deleteEvent(Long id) {
+        validateEventOwner(id);
+
         eventRepository.deleteById(id);
     }
 
@@ -68,12 +75,24 @@ public class EventService {
     }
 
     public Event updateEvent(long id, Event event) {
+        validateEventOwner(id);
         event.setId(id);
         try {
             return eventRepository.save(event);
         } catch (Exception e) {
             logger.error("Error updating event", e);
             throw new EventUpdateOrCreateException("Error updating event");
+        }
+    }
+
+    private void validateEventOwner(Long id) {
+        Event event = getEventById(id);
+        if (event == null) {
+            throw new EventNotFoundException("Event with id " + id + " not found");
+        }
+
+        if (!event.getCreatedBy().getId().equals(AuthenticationService.getAuthenticatedUser().getId())) {
+            throw new IllegalOperationException("Not authorized to change event");
         }
     }
 }
