@@ -1,8 +1,9 @@
 package com.benorim.evently.service;
 
 import com.benorim.evently.entity.Invitation;
+import com.benorim.evently.exception.EmailSendException;
 import com.benorim.evently.repository.InvitationRepository;
-import org.springframework.mail.MailException;
+import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +21,25 @@ public class InvitationService {
         this.emailService = emailService;
     }
 
-    @Transactional(rollbackFor = MailException.class)
+    @Transactional(rollbackFor = MessagingException.class)
     public Invitation save(Invitation invitation) {
         invitation.setDateSent(LocalDate.now());
         Invitation savedInvitation = invitationRepository.save(invitation);
 
-        emailService.sendSimpleMessage(
-                invitation.getGuest().getEmail(),
-                "Invitation to " + invitation.getEvent().getTitle(),
-                "Body of the invitation");
+        try {
+            emailService.sendHtmlMessage(
+                    invitation.getGuest().getEmail(),
+                    "Invitation to Test Event" + savedInvitation.getEvent().getTitle(),
+                    "<html><body><h1>You have been invited to " + savedInvitation.getEvent().getTitle() +
+                            "</h1><br> Address at: <p> " + savedInvitation.getEvent().getAddress().getAddressLine1() + "<br>" +
+                            savedInvitation.getEvent().getAddress().getAddressLine2() + "<br>" +
+                            savedInvitation.getEvent().getAddress().getCity() + "<br>" +
+                            savedInvitation.getEvent().getAddress().getState() + "<br></p>" +
+
+                            "</body></html>");
+        } catch (MessagingException e) {
+            throw new EmailSendException("Email send error");
+        }
         return savedInvitation;
     }
 

@@ -28,4 +28,12 @@ public class ApplicationExceptionHandler {
                 new ErrorResponse(exception.getMessage(), ErrorState.DELETE_FAILURE),
                 HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(EmailSendException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorResponse> handleEmailSendException(EmailSendException exception) {
+        return new ResponseEntity<>(
+                new ErrorResponse(exception.getMessage(), ErrorState.EMAIL_SEND_FAILURE),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
