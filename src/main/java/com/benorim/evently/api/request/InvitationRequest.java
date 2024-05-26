@@ -1,6 +1,7 @@
 package com.benorim.evently.api.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -9,7 +10,7 @@ public record InvitationRequest(
         String phone,
         String firstName,
         String lastName,
-        Long eventId,
+        @NotNull Long eventId,
         LocalDate rsvpByDate
 ) {
 }

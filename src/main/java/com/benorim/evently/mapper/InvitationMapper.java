@@ -6,6 +6,9 @@ import com.benorim.evently.api.response.InvitationResponse;
 import com.benorim.evently.entity.Guest;
 import com.benorim.evently.entity.Invitation;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class InvitationMapper {
 
     public static Invitation mapInvitationRequestToInvitation(InvitationRequest invitationRequest) {
@@ -19,6 +22,16 @@ public class InvitationMapper {
     }
 
     public static InvitationResponse mapInvitationToInvitationResponse(Invitation invitation) {
+        return getInvitationResponse(invitation);
+    }
+
+    public static List<InvitationResponse> mapInvitationsToInvitationResponseList(List<Invitation> invitations) {
+        return invitations.stream()
+                .map(InvitationMapper::getInvitationResponse)
+                .collect(Collectors.toList());
+    }
+
+    private static InvitationResponse getInvitationResponse(Invitation invitation) {
         EventResponse eventResponse = new EventResponse(
                 invitation.getEvent().getId(),
                 invitation.getEvent().getTitle(),

@@ -26,9 +26,32 @@ public class InvitationService {
         invitation.setDateSent(LocalDate.now());
         Invitation savedInvitation = invitationRepository.save(invitation);
 
+        sendInvitationEmail(savedInvitation);
+        return savedInvitation;
+    }
+
+    @Transactional(rollbackFor = MessagingException.class)
+    public List<Invitation> saveAll(List<Invitation> invitations) {
+        invitations.forEach(invitation -> invitation.setDateSent(LocalDate.now()));
+        List<Invitation> savedInvitations = invitationRepository.saveAll(invitations);
+
+        savedInvitations.forEach(this::sendInvitationEmail);
+
+        return savedInvitations;
+    }
+
+    public Invitation findById(Long id) {
+        return invitationRepository.findById(id).orElse(null);
+    }
+
+    public List<Invitation> findAllByEventId(Long eventId) {
+        return invitationRepository.findAllByEventId(eventId);
+    }
+
+    private void sendInvitationEmail(Invitation savedInvitation) {
         try {
             emailService.sendHtmlMessage(
-                    invitation.getGuest().getEmail(),
+                    savedInvitation.getGuest().getEmail(),
                     "Invitation to Test Event" + savedInvitation.getEvent().getTitle(),
                     "<html><body><h1>You have been invited to " + savedInvitation.getEvent().getTitle() +
                             "</h1><br> Address at: <p> " + savedInvitation.getEvent().getAddress().getAddressLine1() + "<br>" +
@@ -40,14 +63,5 @@ public class InvitationService {
         } catch (MessagingException e) {
             throw new EmailSendException("Email send error");
         }
-        return savedInvitation;
-    }
-
-    public Invitation findById(Long id) {
-        return invitationRepository.findById(id).orElse(null);
-    }
-
-    public List<Invitation> findAllByEventId(Long eventId) {
-        return invitationRepository.findAllByEventId(eventId);
     }
 }
