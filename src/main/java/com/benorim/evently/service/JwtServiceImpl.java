@@ -42,7 +42,6 @@ public class JwtServiceImpl implements JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .claims(Map.of("role", userDetails.getAuthorities().iterator().next().getAuthority()))
                 .signWith(getSecretKey())
                 .compact();
     }
