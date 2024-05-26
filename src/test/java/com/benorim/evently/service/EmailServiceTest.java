@@ -34,7 +34,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void testSendSimpleMessage() {
+    void sendSimpleMessage() {
         String to = "test@example.com";
         String subject = "Test Subject";
         String text = "Test Text";
@@ -52,7 +52,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void testSendHtmlMessage1() throws MessagingException, IOException {
+    void sendHtmlMessage() throws MessagingException, IOException {
         String to = "test@example.com";
         String subject = "Test Subject";
         String htmlBody = "<h1>Test HTML</h1>";

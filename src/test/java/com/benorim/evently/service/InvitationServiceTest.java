@@ -72,7 +72,7 @@ class InvitationServiceTest {
     }
 
     @Test
-    void testSave() throws MessagingException {
+    void save() throws MessagingException {
         when(invitationRepository.save(any(Invitation.class))).thenReturn(invitation);
 
         Invitation savedInvitation = invitationService.save(invitation);
@@ -87,7 +87,7 @@ class InvitationServiceTest {
     }
 
     @Test
-    void testSaveAll() throws MessagingException {
+    void saveAll() throws MessagingException {
         List<Invitation> invitations = Arrays.asList(invitation, invitation);
         when(invitationRepository.saveAll(anyList())).thenReturn(invitations);
 
@@ -101,7 +101,7 @@ class InvitationServiceTest {
     }
 
     @Test
-    void testFindById() {
+    void findById() {
         Long id = 1L;
         when(invitationRepository.findById(id)).thenReturn(Optional.of(invitation));
 
@@ -113,7 +113,7 @@ class InvitationServiceTest {
     }
 
     @Test
-    void testFindAllByEventId() {
+    void findAllByEventId() {
         Long eventId = 1L;
         List<Invitation> invitations = Arrays.asList(invitation, new Invitation());
         when(invitationRepository.findAllByEventId(eventId)).thenReturn(invitations);
@@ -126,7 +126,7 @@ class InvitationServiceTest {
     }
 
     @Test
-    void testSendInvitationEmailException() throws MessagingException {
+    void sendInvitationEmailException() throws MessagingException {
         doThrow(new MessagingException()).when(emailService).sendHtmlMessage(anyString(), anyString(), anyString());
         when(invitationRepository.save(invitation)).thenReturn(invitation);
         assertThrows(EmailSendException.class, () -> invitationService.save(invitation));

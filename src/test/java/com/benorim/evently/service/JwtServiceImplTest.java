@@ -34,7 +34,7 @@ class JwtServiceImplTest {
     }
 
     @Test
-    void testGenerateToken() {
+    void generateToken() {
         String token = jwtService.generateToken(userDetails);
         assertNotNull(token);
         String username = jwtService.extractUsername(token);
@@ -42,7 +42,7 @@ class JwtServiceImplTest {
     }
 
     @Test
-    void testGenerateRefreshToken() {
+    void generateRefreshToken() {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", "USER");
         String refreshToken = jwtService.generateRefreshToken(extraClaims, userDetails);
@@ -52,20 +52,20 @@ class JwtServiceImplTest {
     }
 
     @Test
-    void testExtractUsername() {
+    void extractUsername() {
         String token = jwtService.generateToken(userDetails);
         String username = jwtService.extractUsername(token);
         assertEquals(TEST_USERNAME, username);
     }
 
     @Test
-    void testIsTokenValid() {
+    void isTokenValid() {
         String token = jwtService.generateToken(userDetails);
         assertTrue(jwtService.isTokenValid(token, userDetails));
     }
 
     @Test
-    void testIsTokenExpired() {
+    void isTokenExpired() {
         String token = Jwts.builder()
                 .subject(TEST_USERNAME)
                 .issuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24)) // 24 hours ago
