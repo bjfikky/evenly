@@ -5,7 +5,10 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class EmailService {
@@ -25,7 +28,8 @@ public class EmailService {
         javaMailSender.send(message);
     }
 
-    public void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
+    @Async
+    public CompletableFuture<?> sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -33,7 +37,8 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true); // Set to true for HTML content
-
         javaMailSender.send(message);
+        return CompletableFuture.completedFuture(null);
+
     }
 }
