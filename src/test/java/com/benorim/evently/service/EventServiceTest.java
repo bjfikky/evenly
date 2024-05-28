@@ -2,7 +2,7 @@ package com.benorim.evently.service;
 
 import com.benorim.evently.entity.Event;
 import com.benorim.evently.entity.EventlyUser;
-import com.benorim.evently.exception.EventNotFoundException;
+import com.benorim.evently.exception.ResourceNotFoundException;
 import com.benorim.evently.exception.EventUpdateOrCreateException;
 import com.benorim.evently.exception.IllegalOperationException;
 import com.benorim.evently.repository.EventRepository;
@@ -220,7 +220,7 @@ class EventServiceTest {
     void validateEventOwner_notFound() {
         when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(EventNotFoundException.class, () -> eventService.deleteEvent(1L));
+        assertThrows(ResourceNotFoundException.class, () -> eventService.deleteEvent(1L));
         verify(eventRepository, never()).deleteById(1L);
     }
 }

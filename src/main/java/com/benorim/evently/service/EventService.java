@@ -2,7 +2,7 @@ package com.benorim.evently.service;
 
 import com.benorim.evently.entity.Event;
 import com.benorim.evently.entity.EventlyUser;
-import com.benorim.evently.exception.EventNotFoundException;
+import com.benorim.evently.exception.ResourceNotFoundException;
 import com.benorim.evently.exception.EventUpdateOrCreateException;
 import com.benorim.evently.exception.IllegalOperationException;
 import com.benorim.evently.repository.EventRepository;
@@ -88,7 +88,7 @@ public class EventService {
     private void validateEventOwner(Long id) {
         Event event = getEventById(id);
         if (event == null) {
-            throw new EventNotFoundException("Event with id " + id + " not found");
+            throw new ResourceNotFoundException("Event with id " + id + " not found");
         }
 
         if (!event.getCreatedBy().getId().equals(AuthenticationService.getAuthenticatedUser().getId())) {

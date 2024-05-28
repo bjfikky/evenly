@@ -1,7 +1,9 @@
 package com.benorim.evently.service;
 
 import com.benorim.evently.entity.Invitation;
+import com.benorim.evently.enums.Rsvp;
 import com.benorim.evently.exception.EmailSendException;
+import com.benorim.evently.exception.ResourceNotFoundException;
 import com.benorim.evently.repository.InvitationRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,16 @@ public class InvitationService {
 
     public List<Invitation> findAllByEventId(Long eventId) {
         return invitationRepository.findAllByEventId(eventId);
+    }
+
+    public Invitation updateRsvp(Rsvp rsvp, Long invitationId) {
+        Invitation invitation = findById(invitationId);
+        if (invitation == null) {
+            throw new ResourceNotFoundException("Invitation with id " + invitationId + " not found");
+        }
+        invitation.setRsvp(rsvp);
+        invitation.setDateRsvped(LocalDate.now());
+        return invitationRepository.save(invitation);
     }
 
     private void sendInvitationEmail(Invitation savedInvitation) {

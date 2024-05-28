@@ -38,9 +38,9 @@ public class SecurityConfiguration {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.GET, "/api/v1/events", "/api/v1/events/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/invitations/*/respond/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .requestMatchers(AUTH_API_MATCHER, VERSION_API)
-                        .permitAll()
+                        .requestMatchers(AUTH_API_MATCHER, VERSION_API).permitAll()
                         .requestMatchers("/api/**").hasAnyAuthority(Role.USER.name())
                         .anyRequest().authenticated()
                 )

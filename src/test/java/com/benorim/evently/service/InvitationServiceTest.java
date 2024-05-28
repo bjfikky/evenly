@@ -133,4 +133,9 @@ class InvitationServiceTest {
         verify(invitationRepository, times(1)).save(any(Invitation.class));
         verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), anyString());
     }
+
+    @Test
+    void updateRsvp() {
+
+    }
 }

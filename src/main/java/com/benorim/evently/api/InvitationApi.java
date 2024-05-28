@@ -5,6 +5,7 @@ import com.benorim.evently.api.response.InvitationResponse;
 import com.benorim.evently.api.response.InvitationsResponse;
 import com.benorim.evently.entity.Event;
 import com.benorim.evently.entity.Invitation;
+import com.benorim.evently.enums.Rsvp;
 import com.benorim.evently.service.EventService;
 import com.benorim.evently.service.InvitationService;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.benorim.evently.mapper.InvitationMapper.mapInvitationRequestToInvitation;
 import static com.benorim.evently.mapper.InvitationMapper.mapInvitationToInvitationResponse;
 import static com.benorim.evently.mapper.InvitationMapper.mapInvitationsToInvitationResponseList;
+import static org.apache.commons.lang3.StringUtils.upperCase;
 
 @RestController
 @RequestMapping("/api/v1/invitations")
@@ -71,5 +73,11 @@ public class InvitationApi {
     public ResponseEntity<InvitationsResponse> getInvitationByEvent(@PathVariable long eventId) {
         List<Invitation> invitations = invitationService.findAllByEventId(eventId);
         return ResponseEntity.ok(new InvitationsResponse(mapInvitationsToInvitationResponseList(invitations)));
+    }
+
+    @GetMapping("/{id}/respond/{rsvp}")
+    public ResponseEntity<InvitationResponse> respondToInvitation(@PathVariable long id, @PathVariable Rsvp rsvp) {
+        Invitation updatedInvitation = invitationService.updateRsvp(Rsvp.valueOf(upperCase(rsvp.name())), id);
+        return ResponseEntity.ok(mapInvitationToInvitationResponse(updatedInvitation));
     }
 }
