@@ -36,4 +36,12 @@ public class ApplicationExceptionHandler {
                 new ErrorResponse(exception.getMessage(), ErrorState.EMAIL_SEND_FAILURE),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException exception) {
+        return new ResponseEntity<>(
+                new ErrorResponse(exception.getMessage(), ErrorState.NOT_FOUND),
+                HttpStatus.NOT_FOUND);
+    }
 }
