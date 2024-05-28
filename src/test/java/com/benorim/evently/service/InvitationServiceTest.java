@@ -4,7 +4,9 @@ import com.benorim.evently.entity.Address;
 import com.benorim.evently.entity.Event;
 import com.benorim.evently.entity.Guest;
 import com.benorim.evently.entity.Invitation;
+import com.benorim.evently.enums.Rsvp;
 import com.benorim.evently.exception.EmailSendException;
+import com.benorim.evently.exception.ResourceNotFoundException;
 import com.benorim.evently.repository.InvitationRepository;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,14 +76,11 @@ class InvitationServiceTest {
     @Test
     void save() throws MessagingException {
         when(invitationRepository.save(any(Invitation.class))).thenReturn(invitation);
-
         Invitation savedInvitation = invitationService.save(invitation);
-
         assertNotNull(savedInvitation);
         assertEquals(LocalDate.now(), savedInvitation.getDateSent());
         verify(invitationRepository, times(1)).save(invitationCaptor.capture());
         verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), anyString());
-
         Invitation capturedInvitation = invitationCaptor.getValue();
         assertEquals(invitation, capturedInvitation);
     }
@@ -90,9 +89,7 @@ class InvitationServiceTest {
     void saveAll() throws MessagingException {
         List<Invitation> invitations = Arrays.asList(invitation, invitation);
         when(invitationRepository.saveAll(anyList())).thenReturn(invitations);
-
         List<Invitation> savedInvitations = invitationService.saveAll(invitations);
-
         assertNotNull(savedInvitations);
         assertEquals(2, savedInvitations.size());
         savedInvitations.forEach(savedInvitation -> assertEquals(LocalDate.now(), savedInvitation.getDateSent()));
@@ -104,9 +101,7 @@ class InvitationServiceTest {
     void findById() {
         Long id = 1L;
         when(invitationRepository.findById(id)).thenReturn(Optional.of(invitation));
-
         Invitation foundInvitation = invitationService.findById(id);
-
         assertNotNull(foundInvitation);
         assertEquals(invitation, foundInvitation);
         verify(invitationRepository, times(1)).findById(id);
@@ -117,9 +112,7 @@ class InvitationServiceTest {
         Long eventId = 1L;
         List<Invitation> invitations = Arrays.asList(invitation, new Invitation());
         when(invitationRepository.findAllByEventId(eventId)).thenReturn(invitations);
-
         List<Invitation> foundInvitations = invitationService.findAllByEventId(eventId);
-
         assertNotNull(foundInvitations);
         assertEquals(invitations.size(), foundInvitations.size());
         verify(invitationRepository, times(1)).findAllByEventId(eventId);
@@ -136,6 +129,18 @@ class InvitationServiceTest {
 
     @Test
     void updateRsvp() {
+        Long id = 1L;
+        when(invitationRepository.findById(id)).thenReturn(Optional.of(invitation));
+        invitationService.updateRsvp(Rsvp.YES, id);
+        verify(invitationRepository, times(1)).save(invitationCaptor.capture());
+        Invitation capturedInvitation = invitationCaptor.getValue();
+        assertEquals(Rsvp.YES, capturedInvitation.getRsvp());
+    }
 
+    @Test
+    void updateRsvpThrowsException() {
+        Long id = 1L;
+        when(invitationRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> invitationService.updateRsvp(Rsvp.YES, id));
     }
 }

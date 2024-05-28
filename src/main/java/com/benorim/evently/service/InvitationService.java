@@ -43,18 +43,15 @@ public class InvitationService {
     }
 
     public Invitation findById(Long id) {
-        return invitationRepository.findById(id).orElse(null);
+        return invitationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invitation not found"));
     }
 
     public List<Invitation> findAllByEventId(Long eventId) {
         return invitationRepository.findAllByEventId(eventId);
     }
 
-    public Invitation updateRsvp(Rsvp rsvp, Long invitationId) {
-        Invitation invitation = findById(invitationId);
-        if (invitation == null) {
-            throw new ResourceNotFoundException("Invitation with id " + invitationId + " not found");
-        }
+    public Invitation updateRsvp(Rsvp rsvp, Long id) {
+        Invitation invitation = findById(id);
         invitation.setRsvp(rsvp);
         invitation.setDateRsvped(LocalDate.now());
         return invitationRepository.save(invitation);
