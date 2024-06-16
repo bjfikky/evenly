@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    private static final String BASE_64_STRING = "88eYaDwOqL5v3vjfNlAdJnc90YdV5ANgsx483qa5PWM=";
+    @Value("${jwt.base64-auth-secret}")
+    private String baseAuth64Secret;
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
@@ -63,7 +65,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     protected SecretKey getSecretKey() {
-        byte[] key = Decoders.BASE64.decode(BASE_64_STRING);
+        byte[] key = Decoders.BASE64.decode(baseAuth64Secret);
         return Keys.hmacShaKeyFor(key);
     }
 

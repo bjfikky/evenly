@@ -27,3 +27,6 @@ spring:
                     auth: true
                     starttls:
                         enable: true
+
+jwt:
+    base64-auth-secret:
