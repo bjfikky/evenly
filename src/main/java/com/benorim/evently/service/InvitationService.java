@@ -62,7 +62,7 @@ public class InvitationService {
             emailService.sendHtmlMessage(
                     savedInvitation.getGuest().getEmail(),
                     "Invitation to Test Event" + savedInvitation.getEvent().getTitle(),
-                    "<html><body><h1>You have been invited to " + savedInvitation.getEvent().getTitle() +
+                    "<html><body><h1>Hi " + savedInvitation.getGuest().getFirstName() +  ", You have been invited to " + savedInvitation.getEvent().getTitle() +
                             "</h1><br> Address at: <p> " + savedInvitation.getEvent().getAddress().getAddressLine1() + "<br>" +
                             savedInvitation.getEvent().getAddress().getAddressLine2() + "<br>" +
                             savedInvitation.getEvent().getAddress().getCity() + "<br>" +
