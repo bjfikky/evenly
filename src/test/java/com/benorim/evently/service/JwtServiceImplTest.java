@@ -3,9 +3,11 @@ package com.benorim.evently.service;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,16 +23,23 @@ class JwtServiceImplTest {
     @Mock
     private UserDetails userDetails;
 
+    @InjectMocks
     private JwtServiceImpl jwtService;
 
-    private static final String BASE_64_STRING = "88eYaDwOqL5v3vjfNlAdJnc90YdV5ANgsx483qa5PWM=";
     private static final String TEST_USERNAME = "testUser";
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         openMocks(this);
-        jwtService = new JwtServiceImpl();
+        setJwtBase64AuthSecret(jwtService, "73d062e2526ea22965c0d31374bc580e8402d7889596f7d9eebd5ce769606f67");
+
         when(userDetails.getUsername()).thenReturn(TEST_USERNAME);
+    }
+
+    private void setJwtBase64AuthSecret(JwtServiceImpl jwtService, String secret) throws Exception {
+        Field field = JwtServiceImpl.class.getDeclaredField("baseAuth64Secret");
+        field.setAccessible(true);
+        field.set(jwtService, secret);
     }
 
     @Test
