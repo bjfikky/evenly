@@ -67,6 +67,7 @@ public class InvitationService {
                             savedInvitation.getEvent().getAddress().getAddressLine2() + "<br>" +
                             savedInvitation.getEvent().getAddress().getCity() + "<br>" +
                             savedInvitation.getEvent().getAddress().getState() + "<br></p>" +
+                            savedInvitation.getEvent().getAddress().getZipCode() + "<br></p>" +
 
                             "</body></html>");
         } catch (MessagingException e) {
