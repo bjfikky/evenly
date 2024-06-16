@@ -1,4 +1,6 @@
 spring:
+    profiles:
+        active: dev
     application:
         name: @project.name@
         version: @project.version@
@@ -27,4 +29,4 @@ spring:
                         enable: true
 
 jwt:
-    base64-auth-secret: xvVhTcPXTeBB7pM3wU4CVg==
+    base64-auth-secret: 73d062e2526ea22965c0d31374bc580e8402d7889596f7d9eebd5ce769606f67
