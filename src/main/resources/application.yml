@@ -1,6 +1,4 @@
 spring:
-    profiles:
-        active:
     application:
         name: @project.name@
         version: @project.version@
