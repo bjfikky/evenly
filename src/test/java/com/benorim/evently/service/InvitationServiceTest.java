@@ -80,7 +80,7 @@ class InvitationServiceTest {
         assertNotNull(savedInvitation);
         assertEquals(LocalDate.now(), savedInvitation.getDateSent());
         verify(invitationRepository, times(1)).save(invitationCaptor.capture());
-        verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), anyString());
+        verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), any(Invitation.class));
         Invitation capturedInvitation = invitationCaptor.getValue();
         assertEquals(invitation, capturedInvitation);
     }
@@ -94,7 +94,7 @@ class InvitationServiceTest {
         assertEquals(2, savedInvitations.size());
         savedInvitations.forEach(savedInvitation -> assertEquals(LocalDate.now(), savedInvitation.getDateSent()));
         verify(invitationRepository, times(1)).saveAll(invitations);
-        verify(emailService, times(2)).sendHtmlMessage(anyString(), anyString(), anyString());
+        verify(emailService, times(2)).sendHtmlMessage(anyString(), anyString(), any(Invitation.class));
     }
 
     @Test
@@ -120,11 +120,11 @@ class InvitationServiceTest {
 
     @Test
     void sendInvitationEmailException() throws MessagingException {
-        doThrow(new MessagingException()).when(emailService).sendHtmlMessage(anyString(), anyString(), anyString());
+        doThrow(new MessagingException()).when(emailService).sendHtmlMessage(anyString(), anyString(), any(Invitation.class));
         when(invitationRepository.save(invitation)).thenReturn(invitation);
         assertThrows(EmailSendException.class, () -> invitationService.save(invitation));
         verify(invitationRepository, times(1)).save(any(Invitation.class));
-        verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), anyString());
+        verify(emailService, times(1)).sendHtmlMessage(anyString(), anyString(), any(Invitation.class));
     }
 
     @Test

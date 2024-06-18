@@ -1,5 +1,6 @@
 package com.benorim.evently.service;
 
+import com.benorim.evently.entity.Invitation;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
@@ -12,10 +13,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,6 +29,9 @@ class EmailServiceTest {
 
     @Mock
     private JavaMailSender javaMailSender;
+
+    @Mock
+    private TemplateEngine templateEngine;
 
     @InjectMocks
     private EmailService emailService;
@@ -59,9 +67,10 @@ class EmailServiceTest {
 
         MimeMessage mimeMessage = new MimeMessage((Session) null);
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
+        when(templateEngine.process(anyString(), any(Context.class))).thenReturn(htmlBody);
 
 
-        emailService.sendHtmlMessage(to, subject, htmlBody);
+        emailService.sendHtmlMessage(to, subject, new Invitation());
 
         ArgumentCaptor<MimeMessage> messageCaptor = ArgumentCaptor.forClass(MimeMessage.class);
         verify(javaMailSender, times(1)).send(messageCaptor.capture());
