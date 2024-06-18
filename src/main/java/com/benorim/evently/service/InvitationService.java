@@ -62,13 +62,7 @@ public class InvitationService {
             emailService.sendHtmlMessage(
                     savedInvitation.getGuest().getEmail(),
                     "Invitation to Test Event" + savedInvitation.getEvent().getTitle(),
-                    "<html><body><h1>You have been invited to " + savedInvitation.getEvent().getTitle() +
-                            "</h1><br> Address at: <p> " + savedInvitation.getEvent().getAddress().getAddressLine1() + "<br>" +
-                            savedInvitation.getEvent().getAddress().getAddressLine2() + "<br>" +
-                            savedInvitation.getEvent().getAddress().getCity() + "<br>" +
-                            savedInvitation.getEvent().getAddress().getState() + "<br></p>" +
-
-                            "</body></html>");
+                    savedInvitation);
         } catch (MessagingException e) {
             throw new EmailSendException("Email send error");
         }
