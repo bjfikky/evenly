@@ -32,6 +32,8 @@ public class AuthenticationService {
         EventlyUser eventlyUser = new EventlyUser();
         eventlyUser.setEmail(registerRequest.email());
         eventlyUser.setPassword(passwordEncoder.encode(registerRequest.password()));
+        eventlyUser.setOrganizationEmail(registerRequest.organizationEmail());
+        eventlyUser.setOrganizationName(registerRequest.organizationName());
         eventlyUser.setRole(Role.USER);
         eventlyUser.setEnabled(true);
         eventlyUser.setAccountNonLocked(true);

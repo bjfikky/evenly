@@ -36,6 +36,8 @@ public class EventlyUser implements UserDetails {
     private boolean accountNonLocked;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String organizationName;
+    private String organizationEmail;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
