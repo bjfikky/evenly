@@ -25,7 +25,9 @@ public class AuthApi {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody AuthRequest registerRequest) {
         EventlyUser user = authenticationService.register(registerRequest);
-        RegisterResponse response = new RegisterResponse(user.getId(), user.getEmail(), user.getRole());
+        RegisterResponse response = new RegisterResponse(
+                user.getId(), user.getEmail(), user.getRole(), user.getOrganizationName(), user.getOrganizationEmail()
+        );
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

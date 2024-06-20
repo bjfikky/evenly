@@ -26,7 +26,10 @@
       <a href="https://www.google.com" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #007BFF; text-decoration: none; border-radius: 5px;">RSVP Now</a>
     </p>
     <p>We look forward to seeing you there!</p>
-    <p>Best regards,<br>The Event Team</p>
+    <p>Best regards,
+      <br><span th:text="${invitation.getEvent().getCreatedBy().getOrganizationName()}">Event Team</span>
+      <br><a th:href="${invitation.getEvent().getCreatedBy().getOrganizationEmail()}" th:text="${invitation.getEvent().getCreatedBy().getOrganizationEmail()}"></a>
+    </p>
   </div>
 </div>
 </body>
