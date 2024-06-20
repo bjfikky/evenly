@@ -61,7 +61,7 @@ public class InvitationService {
         try {
             emailService.sendHtmlMessage(
                     savedInvitation.getGuest().getEmail(),
-                    "Invitation to Test Event" + savedInvitation.getEvent().getTitle(),
+                    "Invitation to " + savedInvitation.getEvent().getTitle(),
                     savedInvitation);
         } catch (MessagingException e) {
             throw new EmailSendException("Email send error");
