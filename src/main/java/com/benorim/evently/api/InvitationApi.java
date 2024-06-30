@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -76,8 +77,9 @@ public class InvitationApi {
     }
 
     @GetMapping("/{id}/respond/{rsvp}")
-    public ResponseEntity<InvitationResponse> respondToInvitation(@PathVariable long id, @PathVariable Rsvp rsvp) {
-        Invitation updatedInvitation = invitationService.updateRsvp(Rsvp.valueOf(upperCase(rsvp.name())), id);
-        return ResponseEntity.ok(mapInvitationToInvitationResponse(updatedInvitation));
+    public ResponseEntity<?> respondToInvitation(
+            @PathVariable long id, @PathVariable Rsvp rsvp, @RequestParam String token) {
+        invitationService.updateRsvp(Rsvp.valueOf(upperCase(rsvp.name())), id, token);
+        return ResponseEntity.ok().build();
     }
 }

@@ -71,6 +71,7 @@ class InvitationServiceTest {
         invitation = new Invitation();
         invitation.setEvent(event);
         invitation.setGuest(guest);
+        invitation.setToken("test-token");
     }
 
     @Test
@@ -131,7 +132,7 @@ class InvitationServiceTest {
     void updateRsvp() {
         Long id = 1L;
         when(invitationRepository.findById(id)).thenReturn(Optional.of(invitation));
-        invitationService.updateRsvp(Rsvp.YES, id);
+        invitationService.updateRsvp(Rsvp.YES, id, "test-token");
         verify(invitationRepository, times(1)).save(invitationCaptor.capture());
         Invitation capturedInvitation = invitationCaptor.getValue();
         assertEquals(Rsvp.YES, capturedInvitation.getRsvp());
@@ -141,6 +142,6 @@ class InvitationServiceTest {
     void updateRsvpThrowsException() {
         Long id = 1L;
         when(invitationRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> invitationService.updateRsvp(Rsvp.YES, id));
+        assertThrows(ResourceNotFoundException.class, () -> invitationService.updateRsvp(Rsvp.YES, id, "test-token"));
     }
 }

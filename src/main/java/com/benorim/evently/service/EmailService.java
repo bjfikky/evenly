@@ -37,6 +37,8 @@ public class EmailService {
     public CompletableFuture<?> sendHtmlMessage(String to, String subject, Invitation invitation) throws MessagingException {
         Context context = new Context();
         context.setVariable("invitation", invitation);
+        context.setVariable("invitationLink", "http://localhost:8080/api/v1/invitations/"
+                + invitation.getId() + "/respond/YES?token=" + invitation.getToken());
 
         String htmlContent = templateEngine.process("invitation-email-template.html", context);
 
