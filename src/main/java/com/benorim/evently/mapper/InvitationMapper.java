@@ -18,7 +18,7 @@ public class InvitationMapper {
                 invitationRequest.email(),
                 invitationRequest.phone());
 
-        return new Invitation(null, guest, null, null, null, null, null, null);
+        return new Invitation(null, guest, null, null, null, null, null, null, null);
     }
 
     public static InvitationResponse mapInvitationToInvitationResponse(Invitation invitation) {
