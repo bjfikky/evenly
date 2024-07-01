@@ -15,6 +15,7 @@ public record EventCreateRequest(
         String imageUrl,
         LocalDateTime startTime,
         LocalDateTime endTime,
-        String additionalNotes
+        String additionalNotes,
+        Boolean isPrivate
         ) {
 }

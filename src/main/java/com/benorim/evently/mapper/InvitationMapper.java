@@ -46,7 +46,8 @@ public class InvitationMapper {
                 invitation.getEvent().getEndTime(),
                 invitation.getEvent().getCreatedAt(),
                 invitation.getEvent().getUpdatedAt(),
-                invitation.getEvent().getAdditionalNotes()
+                invitation.getEvent().getAdditionalNotes(),
+                invitation.getEvent().getIsPrivate()
         );
 
         return new InvitationResponse(

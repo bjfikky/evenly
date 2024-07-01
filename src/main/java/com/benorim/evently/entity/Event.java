@@ -42,6 +42,8 @@ public class Event {
 
     private LocalDateTime createdAt;
 
+    private Boolean isPrivate;
+
     @ManyToOne
     private EventlyUser createdBy;
 
@@ -53,7 +55,7 @@ public class Event {
 
     private String additionalNotes;
 
-    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, List<Invitation> invitations, String additionalNotes) {
+    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, List<Invitation> invitations, String additionalNotes, Boolean isPrivate) {
         this.title = title;
         this.description = description;
         this.address = address;
@@ -62,9 +64,10 @@ public class Event {
         this.endTime = endTime;
         this.invitations = invitations;
         this.additionalNotes = additionalNotes;
+        this.isPrivate = isPrivate;
     }
 
-    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, String additionalNotes) {
+    public Event(String title, String description, Address address, String imageUrl, LocalDateTime startTime, LocalDateTime endTime, String additionalNotes, Boolean isPrivate) {
         this.title = title;
         this.description = description;
         this.address = address;
@@ -72,5 +75,6 @@ public class Event {
         this.startTime = startTime;
         this.endTime = endTime;
         this.additionalNotes = additionalNotes;
+        this.isPrivate = isPrivate;
     }
 }
