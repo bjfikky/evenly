@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class Event {
 
     private LocalDateTime createdAt;
 
+    @NotNull
     private Boolean isPrivate;
 
     @ManyToOne

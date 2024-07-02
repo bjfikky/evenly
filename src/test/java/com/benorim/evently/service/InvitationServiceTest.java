@@ -67,6 +67,7 @@ class InvitationServiceTest {
         event.setTitle("Test Event");
         event.setDescription("Test Description");
         event.setAddress(address);
+        event.setIsPrivate(false);
 
         invitation = new Invitation();
         invitation.setEvent(event);
