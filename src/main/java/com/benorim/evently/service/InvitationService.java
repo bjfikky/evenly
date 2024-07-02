@@ -18,14 +18,19 @@ public class InvitationService {
 
     private final InvitationRepository invitationRepository;
     private final EmailService emailService;
+    private final EventService eventService;
 
-    public InvitationService(InvitationRepository invitationRepository, EmailService emailService) {
+    public InvitationService(InvitationRepository invitationRepository, EmailService emailService, EventService eventService) {
         this.invitationRepository = invitationRepository;
         this.emailService = emailService;
+        this.eventService = eventService;
     }
 
     @Transactional(rollbackFor = MessagingException.class)
     public Invitation save(Invitation invitation) {
+        if (invitation.getEvent().getIsPrivate()) {
+            eventService.validateEventOwner(invitation.getEvent().getId());
+        }
         invitation.setDateSent(LocalDate.now());
         Invitation savedInvitation = invitationRepository.save(invitation);
 
@@ -35,7 +40,12 @@ public class InvitationService {
 
     @Transactional(rollbackFor = MessagingException.class)
     public List<Invitation> saveAll(List<Invitation> invitations) {
-        invitations.forEach(invitation -> invitation.setDateSent(LocalDate.now()));
+        invitations.forEach(invitation -> {
+            if (invitation.getEvent().getIsPrivate()) {
+                eventService.validateEventOwner(invitation.getEvent().getId());
+            }
+            invitation.setDateSent(LocalDate.now());
+        });
         List<Invitation> savedInvitations = invitationRepository.saveAll(invitations);
 
         savedInvitations.forEach(this::sendInvitationEmail);

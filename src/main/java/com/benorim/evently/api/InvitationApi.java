@@ -47,6 +47,15 @@ public class InvitationApi {
         return ResponseEntity.ok(mapInvitationToInvitationResponse(saved));
     }
 
+    @PostMapping("/self-invite")
+    public ResponseEntity<InvitationResponse> sendSelfInvitation(@Valid @RequestBody InvitationRequest invitationRequest) {
+        Event event = eventService.getEventById(invitationRequest.eventId());
+        Invitation invitation = mapInvitationRequestToInvitation(invitationRequest);
+        invitation.setEvent(event);
+        Invitation saved = invitationService.save(invitation);
+        return ResponseEntity.ok(mapInvitationToInvitationResponse(saved));
+    }
+
     @PostMapping("/send-all")
     public ResponseEntity<InvitationsResponse> sendInvitations(@Valid @RequestBody List<InvitationRequest> invitationRequests) {
         List<InvitationResponse> invitationResponses = new ArrayList<>();

@@ -85,10 +85,10 @@ public class EventService {
         }
     }
 
-    private void validateEventOwner(Long id) {
-        Event event = getEventById(id);
+    public void validateEventOwner(Long eventId) {
+        Event event = getEventById(eventId);
         if (event == null) {
-            throw new ResourceNotFoundException("Event with id " + id + " not found");
+            throw new ResourceNotFoundException("Event with eventId " + eventId + " not found");
         }
 
         if (!event.getCreatedBy().getId().equals(AuthenticationService.getAuthenticatedUser().getId())) {

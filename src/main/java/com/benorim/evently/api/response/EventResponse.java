@@ -16,6 +16,7 @@ public record EventResponse(
     LocalDateTime endTime,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
-    String additionalNotes
+    String additionalNotes,
+    Boolean isPrivate
 ) {
 }

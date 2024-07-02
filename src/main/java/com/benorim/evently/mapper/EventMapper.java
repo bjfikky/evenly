@@ -23,7 +23,8 @@ public class EventMapper {
                 createEventRequest.imageUrl(),
                 createEventRequest.startTime(),
                 createEventRequest.endTime(),
-                createEventRequest.additionalNotes()
+                createEventRequest.additionalNotes(),
+                createEventRequest.isPrivate()
         );
     }
 
@@ -56,6 +57,7 @@ public class EventMapper {
                 event.getEndTime(),
                 event.getCreatedAt(),
                 event.getUpdatedAt(),
-                event.getAdditionalNotes());
+                event.getAdditionalNotes(),
+                event.getIsPrivate());
     }
 }
