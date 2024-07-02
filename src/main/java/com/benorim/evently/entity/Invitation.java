@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class Invitation {
 
     @PrePersist
     private void ensureToken() {
-        if (this.token == null) {
+        if (StringUtils.isEmpty(token)) {
             this.token = UUID.randomUUID().toString();
         }
     }
